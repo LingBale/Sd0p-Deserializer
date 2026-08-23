@@ -1,0 +1,14 @@
+# Sd0p-v3.0 依赖清单
+
+# GUI 框架
+PyQt6>=6.5.0
+
+# HTTP 请求
+requests>=2.31.0
+
+# POP 链图谱可视化
+matplotlib>=3.7.0
+networkx>=3.0
+
+# PHP 解析（可选，若使用 Rust 扩展则不需要）
+# php-parser>=0.1.0

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  php74:
+    image: php:7.4-cli
+    container_name: sd0p_php74
+    volumes:
+      - .:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true
+
+  php81:
+    image: php:8.1-cli
+    container_name: sd0p_php81
+    volumes:
+      - .:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true

@@ -1,0 +1,73 @@
+destruct_conditions:
+  - name: "strict_equality"
+    pattern: '\$this->(\w+)\s*===\s*(?:''([^'']+)''|"([^"]+)"|([a-zA-Z0-9]+))'
+    description: "Strict equality check in __destruct"
+  - name: "loose_equality"
+    pattern: '\$this->(\w+)\s*==\s*(?:''([^'']+)''|"([^"]+)"|([a-zA-Z0-9]+))'
+    description: "Loose equality check in __destruct"
+  - name: "not_equal"
+    pattern: '\$this->(\w+)\s*!=\s*(?:''([^'']+)''|"([^"]+)"|([a-zA-Z0-9]+))'
+    description: "Not equal check in __destruct (weak comparison)"
+
+dangerous_functions:
+  rce:
+    - 'system'
+    - 'exec'
+    - 'passthru'
+    - 'shell_exec'
+    - 'popen'
+    - 'proc_open'
+  file:
+    - 'file_get_contents'
+    - 'file_put_contents'
+    - 'fopen'
+    - 'unlink'
+    - 'include'
+    - 'require'
+    - 'require_once'
+    - 'include_once'
+  callbacks:
+    - 'call_user_func'
+    - 'call_user_func_array'
+    - 'array_map'
+    - 'usort'
+    - 'uasort'
+    - 'uksort'
+    - 'array_filter'
+    - 'array_reduce'
+
+new_expressions:
+  pattern: 'new\s+(\w+)\s*\(\s*\$this->(\w+)\s*\)'
+  description: "Instantiating a class using a property value"
+
+md5_weak_comparisons:
+  pattern: "md5\\s*\\(\\s*\\$this->(\\w+)\\s*\\)\\s*==\\s*['\"]?(0e\\d+)['\"]?"
+  description: "MD5 weak comparison with magic hash"
+
+builtin_class_instantiation:
+  - class_name: "SimpleXMLElement"
+    pattern: 'new\s+SimpleXMLElement\s*\(\s*\$this->(\w+)'
+    payload_value: "file:///flag"
+    description: "XXE/SSRF via SimpleXMLElement"
+  - class_name: "SoapClient"
+    pattern: 'new\s+SoapClient\s*\(\s*\$this->(\w+)'
+    payload_value: "http://127.0.0.1:8080"
+    description: "SSRF via SoapClient __call"
+
+pop_chain_instantiation:
+  pattern: 'new\s+(\w+)\s*\(\s*\$this->(\w+)'
+  description: "Cross-class POP chain instantiation"
+
+callback_rce_patterns:
+  - type: "array_map"
+    pattern: 'array_map\s*\(\s*\$this->(\w+)\s*,\s*\$this->(\w+)'
+    func_prop: 1
+    args_prop: 2
+  - type: "call_user_func"
+    pattern: 'call_user_func\s*\(\s*\$this->(\w+)\s*,\s*\$this->(\w+)'
+    func_prop: 1
+    args_prop: 2
+
+string_escape_patterns:
+  pattern: "str_replace\\s*\\(\\s*['\"]([^'\"]+)['\"]\\s*,\\s*['\"]([^'\"]+)['\"]\\s*,\\s*(\\$\\w+)"
+  description: "Detect str_replace before unserialize for string escape"
