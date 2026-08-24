@@ -111,12 +111,6 @@ python -m pytest tests/ -v
 
 `tests/` 目录包含端到端引擎测试与字符串逃逸场景测试。`docker/` 目录提供 PHP 7.4 / 8.1 容器用于 Payload 实际执行验证。
 
-## 文档
-
-- [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) — 打包与分发指南
-- [RELEASE_NOTES.md](RELEASE_NOTES.md) — 历史发行说明
-- [docs/V2_UI_GUIDE.md](docs/V2_UI_GUIDE.md) — V2 UI 使用与架构说明
-
 ## 注意事项
 
 - 本项目为安全研究工具，请仅用于合法的 CTF 竞赛或授权的安全测试。
